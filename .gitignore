@@ -1,0 +1,13 @@
+/logs/*
+
+# "!" means don't ignore
+!logs/.gitkeep
+
+/# Ignore Mac system files
+.DS_store
+
+# Ignore node_modules folder
+node_modules
+
+# Ignore SASS config files
+.sass-cache

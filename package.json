@@ -2,8 +2,9 @@
   "name": "task-maneger-backend",
   "version": "1.0.0",
   "description": "Task manager app",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/agoshxyz/task-maneger-backend/issues"
   },
-  "homepage": "https://github.com/agoshxyz/task-maneger-backend#readme"
+  "homepage": "https://github.com/agoshxyz/task-maneger-backend#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.7.3",
+    "sequelize": "^6.18.0",
+    "validator": "^13.7.0"
+  }
 }
