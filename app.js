@@ -1,4 +1,5 @@
 const express = require('express')
+// const sequelize = require('./config/database.config.js')
 const app = express()
 const port = 8000
 
