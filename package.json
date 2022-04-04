@@ -1,0 +1,19 @@
+{
+  "name": "task-maneger-backend",
+  "version": "1.0.0",
+  "description": "Task manager app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agoshxyz/task-maneger-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/agoshxyz/task-maneger-backend/issues"
+  },
+  "homepage": "https://github.com/agoshxyz/task-maneger-backend#readme"
+}
