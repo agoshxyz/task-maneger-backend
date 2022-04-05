@@ -14,9 +14,9 @@ const task = db.define("Task", {
         type: Sequelize.STRING(300),
         allowNull: false,
     },
-    taskAssignedusers: {
-        type: Sequelize.ABSTRACT,
-        //????
+    taskAssignedUsers: {
+        type: Sequelize.INTEGER,
+        foreignKey: 'UserID',
         allowNull: false,
     },
     taskStatus: {
