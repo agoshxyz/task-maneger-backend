@@ -15,7 +15,7 @@ const task = db.define("Task", {
         allowNull: false,
     },
     taskAssignedusers: {
-        type: Sequelize.ABSTRACT,
+        type: Sequelize.STRING(100),
         //????
         allowNull: false,
     },
