@@ -4,6 +4,11 @@ const models = require("./models")
 const app = express()
 const port = process.env.PORT
 
+const routes = require("./routes")
+app.use("/", routes);
+//use the users.js file to handle
+//endpoints that start with /users
+
 sequelize.sync();
 sequelize.authenticate()
   .then(() => {
