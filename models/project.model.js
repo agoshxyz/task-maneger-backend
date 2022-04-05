@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
  const db = require("../config/database.config");
 
- const project = db.define("Project", {
+ const Project = db.define("Project", {
    projectName: {
      type: Sequelize.STRING(30),
      allowNull: false,
@@ -25,5 +25,5 @@ const Sequelize = require("sequelize");
    },
  });
 
- project.sync({ alter: true });
- module.exports = project;
+ Project.sync({ alter: true });
+ module.exports = Project;
