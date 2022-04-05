@@ -18,7 +18,7 @@ const User = db.define("User", {
         type: Sequelize.STRING(100),
         allowNull: false,
     },
-    UserRole: Sequelize.STRING(30),
+    UserRole: Sequelize.ENUM('Administrator', 'User', 'Manager'),
     UserAvatar: Sequelize.STRING(300),
 
 }, {
