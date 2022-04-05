@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/agoshxyz/task-maneger-backend#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "dotenv": "^16.0.0",
     "env-cmd": "^10.1.0",

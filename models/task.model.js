@@ -1,6 +1,8 @@
 const Sequelize = require("sequelize");
 const db = require("../config/database.config");
 
+
+
 const task = db.define("Task", {
     taskName: {
         type: Sequelize.STRING(30),
