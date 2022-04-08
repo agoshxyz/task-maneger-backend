@@ -67,7 +67,7 @@ const update = async (req, res) => {
         const { nume, email, parola, role } = req.body;
 
         const currentUser = await User.findOne({
-            where: { id: req.params.UserID },
+            where: { UserID: req.params.UserID },
         });
 
         if (!currentUser) return res.status(404).send("404 USER NOT FOUND !!!!");
@@ -93,7 +93,7 @@ const update = async (req, res) => {
             role,
         };
         if ((await User.update(updateUser, {
-            where: { id: req.params.UserID },
+            where: { UserID: req.params.UserID },
         })) != 1)
             return res.status(404).send("Couldn't update user!");
         return res.status(200).send("User successfully updated!");
@@ -110,12 +110,12 @@ const update = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const currentUser = await User.findOne({
-            where: { id: req.params.UserID },
+            where: { UserID: req.params.UserID },//
         });
 
         if (!currentUser) return res.status(404).send("404 User not found!");
 
-        if ((await User.destroy({ where: { id: req.params.UserID } })) != 1)
+        if ((await User.destroy({ where: { UserID: req.params.UserID } })) != 1)
             return res.status(404).send('User can not be deleted');
         return res.status(200).send('User deleted succesfully');
 
@@ -142,7 +142,7 @@ const findAll = async (req, res) => {
 const findOne = async (req, res) => {
     try {
         const user = await User.findOne({
-            where: { id: req.params.UserID }
+            where: { UserID: req.params.UserID }
         });
 
         if (!user) return res.status(404).send("404 User not found!");
