@@ -4,7 +4,7 @@ const models = require("./models")
 const app = express()
 const router = express.Router();
 const port = process.env.PORT
-const userController = require("./controllers/Register.controller");
+const userController = require("./controllers/Users.controller");
 const bodyparser = require("body-parser")
 sequelize.sync();
 sequelize.authenticate()
