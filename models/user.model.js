@@ -25,17 +25,23 @@ const User = db.define("User", {
     },
     UserAvatar: Sequelize.STRING(300),
 
-}, {
-    freezeTableName: true,
-    instanceMethods: {
-        generateHash(password) {
-            return bcrypt.hash(password, bcrypt.genSaltSync(8));
-        },
-        validPassword(password) {
-            return bcrypt.compare(password, this.password);
+    IsDeleted: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    },
+
+},
+    {
+        freezeTableName: true,
+        instanceMethods: {
+            generateHash(password) {
+                return bcrypt.hash(password, bcrypt.genSaltSync(8));
+            },
+            validPassword(password) {
+                return bcrypt.compare(password, this.password);
+            }
         }
-    }
-});
+    });
 
 
 User.hasMany(role, {

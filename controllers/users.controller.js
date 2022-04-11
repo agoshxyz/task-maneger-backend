@@ -1,6 +1,6 @@
 const User = require("../models/user.model");
 const validateEmail = require("../utils/emailValidation");
-
+const Sequelize = require("sequelize");
 /**
  * Creats a new user
  * @param {*} req Htpp req
@@ -67,8 +67,9 @@ const update = async (req, res) => {
         const { UserID, UserName, UserEmail, UserPassword, UserRole } = req.body;
         let returnStatusCode = 201;
         let returnData;
+        const { id } = req.params;
         const currentUser = await User.findOne({
-            where: { UserID: UserID },
+            where: { UserID: id },
         });
 
         if (!currentUser) {
@@ -78,14 +79,6 @@ const update = async (req, res) => {
 
 
         // VALIDARE
-        if (UserName || UserName.length > 30) {
-            returnData = { message: "Invalid name" };
-            returnStatusCode = 400;
-        }
-        if (validateEmail(UserEmail)) {
-            returnData = { message: "Invalid Email" };
-            returnStatusCode = 400;
-        }
         const existingUser = await User.findOne({
             where: { UserEmail: UserEmail },
         });
@@ -100,7 +93,7 @@ const update = async (req, res) => {
             UserRole
         };
         if ((await User.update(updateUser, {
-            where: { id: req.params.UserID },
+            where: { UserID: id },
         })) != 1) {
             res.status(404).send("Couldn't update user!");
         }
@@ -118,22 +111,21 @@ const update = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        const currentUser = await User.findOne({
-            where: { id: req.params.UserID },
-        });
+        const { id } = req.params;
 
-        if (!currentUser) {
-            returnData = { message: "User not found" };
-            returnStatusCode = 404;
+        const userInstance = await User.findOne({
+            where: { UserID: id }
+        })
+        if (userInstance) {
+            userInstance.set({
+                IsDeleted: true
+            });
+            await userInstance.save();
+            res.status(200).send('User deleted succesfully');
+
+        } else {
+            res.status(404).send('User 404 Not found');
         }
-        if ((await User.destroy({ where: { id: req.params.UserID } })) != 1) {
-            returnData = { message: "User can not be deleted" };
-            returnStatusCode = 404;
-        }
-        res.status(200).send('User deleted succesfully');
-
-
-
 
     } catch (err) {
         res.status(500).send({ message: err.message });
@@ -143,7 +135,9 @@ const deleteUser = async (req, res) => {
 const findAll = async (req, res) => {
     try {
         let users = {};
-        users = await User.findAll();
+        users = await User.findAll({
+            where: { IsDeleted: false }
+        });
         return res.status(200).send({ users });
     } catch (err) {
         return res.status(500).send({ message: err.message });
@@ -155,7 +149,7 @@ const findAll = async (req, res) => {
 const findOne = async (req, res) => {
     try {
         const user = await User.findOne({
-            where: { id: req.params.UserID }
+            where: { UserID: req.params.id }
         });
 
         if (!user) return res.status(404).send("404 User not found!");

@@ -18,7 +18,7 @@ sequelize.authenticate()
   });
 
 app.use(bodyparser.json());
-router.post('/register', userController.create)
+router.get('/user/:id', userController.findOne)
 
 app.use(router);
 
