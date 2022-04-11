@@ -24,9 +24,10 @@ app.use(bodyparser.json());
 router.post('/createProject', projectsController.createProject)
 app.use(router);
 
-router.post('/task', tasksController.create)
+router.put('/updateProject/:id', projectsController.updateProject)
 app.use(router);
 app.use(bodyparser.json());
+
 
 
 app.post('/', (req, res) => {
