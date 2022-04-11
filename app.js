@@ -28,7 +28,14 @@ router.put('/updateProject/:id', projectsController.updateProject)
 app.use(router);
 app.use(bodyparser.json());
 
+router.delete('/delete/:id', projectsController.deleteProject)
+app.use(router);
+app.use(bodyparser.json());
 
+
+router.get('/projects', projectsController.getAllProjects)
+app.use(router);
+app.use(bodyparser.json());
 
 app.post('/', (req, res) => {
   res.send('Hello from Express!')

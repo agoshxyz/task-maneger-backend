@@ -92,17 +92,50 @@ const updateProject = async (req, res) => {
     if (
       (await Project.update(updatedProject, {
         where: { projectId: id },
-      })) !== 0)
-    // ) {
-    //   return res.status(404).send("Project could not be updated.");
-    // }
-    return res.status(201).send({ message: "Project updated successfully" });
+      })) !== 0
+    )
+      // ) {
+      //   return res.status(404).send("Project could not be updated.");
+      // }
+      return res.status(201).send({ message: "Project updated successfully" });
   } catch (err) {
     console.error(err);
+    return res.status(500).send({ message: err.message });
+  }
+};
+
+const deleteProject = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const projectInstance = await Project.findOne({
+      where: { projectId: id },
+    });
+    if (projectInstance) {
+      projectInstance.set({
+        isDeleted: true,
+      });
+      await projectInstance.save();
+      res.status(200).send({ message: "Project deleted successfully" });
+    } else {
+      res.status(404).send({ message: "Project was not found" });
+    }
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+const getAllProjects = async (req, res) => {
+  try {
+    let projects = {};
+    projects = await Project.findAll();
+    return res.status(200).send(projects);
+  } catch (err) {
     return res.status(500).send({ message: err.message });
   }
 };
 module.exports = {
   createProject,
   updateProject,
+  deleteProject,
+  getAllProjects,
 };
