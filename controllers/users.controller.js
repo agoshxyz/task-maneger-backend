@@ -136,11 +136,11 @@ const findAll = async (req, res) => {
     try {
         let users = {};
         users = await User.findAll({
-            where: { IsDeleted: false }
+            where: { IsDeleted: null }
         });
-        return res.status(200).send({ users });
+        res.status(200).send({ users });
     } catch (err) {
-        return res.status(500).send({ message: err.message });
+        res.status(500).send({ message: err.message });
     }
 }
 

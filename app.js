@@ -18,7 +18,7 @@ sequelize.authenticate()
   });
 
 app.use(bodyparser.json());
-router.get('/user/:id', userController.findOne)
+router.get('/user', userController.findAll)
 
 app.use(router);
 

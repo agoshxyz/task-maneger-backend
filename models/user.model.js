@@ -26,7 +26,7 @@ const User = db.define("User", {
     UserAvatar: Sequelize.STRING(300),
 
     IsDeleted: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.STRING(30),
         defaultValue: false
     },
 
