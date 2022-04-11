@@ -1,6 +1,9 @@
 const User = require("../models/user.model");
 const validateEmail = require("../utils/emailValidation");
 const Sequelize = require("sequelize");
+const passwordUtils = require("../utils/password");
+
+
 /**
  * Creats a new user
  * @param {*} req Htpp req
@@ -44,14 +47,17 @@ const create = async (req, res) => {
             returnStatusCode = 400;
         }
 
+        const hash = await passwordUtils.generateHash(UserPassword)
+
         if (returnStatusCode === 201) {
             const newUser = {
                 UserName,
                 UserEmail,
-                UserPassword,
+                UserPassword: hash,
                 UserRole
             }
             const user = await User.create(newUser);
+
             res.status(returnStatusCode).send(user);
         } else {
             res.status(returnStatusCode).send(returnData);
