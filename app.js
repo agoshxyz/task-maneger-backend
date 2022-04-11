@@ -5,6 +5,7 @@ const app = express()
 const router = express.Router();
 const port = process.env.PORT
 const userController = require("./controllers/users.controller");
+const tasksController = require("./controllers/tasks.controller");
 const bodyparser = require("body-parser")
 
 
@@ -19,8 +20,28 @@ sequelize.authenticate()
 
 app.use(bodyparser.json());
 router.post('/register', userController.create)
+app.use(bodyparser.json());
 
+router.post('/task', tasksController.create)
 app.use(router);
+app.use(bodyparser.json());
+
+router.put('/task/:id', tasksController.update)
+app.use(router);
+app.use(bodyparser.json());
+
+router.delete('/delete/:id', tasksController.deleteTask)
+app.use(router);
+app.use(bodyparser.json());
+
+router.get('/user/:id', tasksController.findOne)
+app.use(router);
+app.use(bodyparser.json());
+
+router.get('/tasks', tasksController.findAll)
+app.use(router);
+app.use(bodyparser.json());
+
 
 app.post('/', (req, res) => {
   res.send('Hello from Express!')
