@@ -12,15 +12,12 @@ const dotenv = require('dotenv');
 
 dotenv.config(); //JwToken
 
-router.get("/", (req, res) => {
-    res.send('Hello from Express!')
-})
-router.get("/Users", User.findAll)
-router.get("/Users/:UserID", User.findOne)
+router.get("/", User.findAll)
+router.get("/:UserID", User.findOne)
 router.use(bodyparser.json())
     .post("/register", User.create)
-router.delete("/Users/:UserID", User.deleteUser)
-router.put("/Users/:UserID", User.update)
+router.delete("/:UserID", User.deleteUser)
+router.put("/:UserID", User.update)
 
 // const token = generateAccessToken({ username: req.body.username });
 // res.json(token);
