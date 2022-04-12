@@ -1,4 +1,4 @@
-const User = require("../controllers/Users.controller.js");
+const User = require("../controllers/users.controller.js");
 
 const express = require('express')
 const app = express()
@@ -9,7 +9,7 @@ module.exports = (app) => {
 
     app.get("/Users", User.findAll);
 
-    app.put("/Users/:UserID", User.update);
+    app.put("/Users/UserID", User.update);
 
     app.delete("/Users/:UserID", User.delete);
 

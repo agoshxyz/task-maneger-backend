@@ -1,9 +1,13 @@
 const Sequelize = require("sequelize");
 const db = require("../config/database.config");
+const User = require("../models/user.model");
 
-
-
-const task = db.define("Task", {
+const Task = db.define("Task", {
+    taskID: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+    },
     taskName: {
         type: Sequelize.STRING(30),
         allowNull: false,
@@ -13,20 +17,22 @@ const task = db.define("Task", {
         allowNull: false,
     },
     taskSupervisor: {
-        type: Sequelize.STRING(300),
+        type: Sequelize.STRING(30),
         allowNull: false,
     },
     taskAssignedUsers: {
-        type: Sequelize.INTEGER,
-        foreignKey: 'UserID',
-        allowNull: false,
+        type: Sequelize.UUID,
+        // foreignKey: 'UserID'
+        references: {
+            model: User,
+            key: 'UserID'
+        }
     },
     taskStatus: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
-        allowNull: false,
     },
 });
 
-task.sync({ alter: true });
-module.exports = task;
+Task.sync({ alter: true });
+module.exports = Task;
