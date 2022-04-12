@@ -20,6 +20,10 @@ const Task = db.define("Task", {
         type: Sequelize.STRING(30),
         allowNull: false,
     },
+    taskDeadline: {
+        type: Sequelize.DATEONLY,
+        allowNull: true,
+    },
     taskAssignedUsers: {
         type: Sequelize.UUID,
         // foreignKey: 'UserID'

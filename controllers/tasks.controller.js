@@ -5,7 +5,7 @@ const validateEmail = require("../utils/emailValidation");
 
 //Create new task
 const createTask = async (req, res) => {
-    const { taskName, taskDescription, taskSupervisor, taskAssignedUsers } = req.body;
+    const { taskName, taskDescription, taskSupervisor, taskAssignedUsers, taskDeadline } = req.body;
     try {
         let returnStatusCode = 201;
         let returnData;
@@ -30,7 +30,9 @@ const createTask = async (req, res) => {
                 taskName,
                 taskDescription,
                 taskSupervisor,
-                taskAssignedUsers
+                taskAssignedUsers,
+                taskStatus,
+                taskDeadline
             };
             const task = await Task.create(newTask);
             res.status(returnStatusCode).send({
@@ -50,7 +52,7 @@ const createTask = async (req, res) => {
 //Update existing task
 const updateTask = async (req, res) => {
     try {
-        const { taskName, taskDescription, taskSupervisor, taskAssignedUsers, taskStatus } = req.body;
+        const { taskName, taskDescription, taskSupervisor, taskAssignedUsers, taskStatus, taskDeadline } = req.body;
         const { id } = req.params
         let returnStatusCode = 201;
         let returnData;
@@ -81,6 +83,7 @@ const updateTask = async (req, res) => {
             taskDescription,
             taskAssignedUsers,
             taskSupervisor,
+            taskDeadline
         };
         if (
             (await Task.update(updatedTask, {
