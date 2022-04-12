@@ -4,6 +4,9 @@ const models = require("./models")
 const app = express()
 const port = process.env.PORT
 
+
+
+
 sequelize.sync();
 sequelize.authenticate()
   .then(() => {

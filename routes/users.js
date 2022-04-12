@@ -3,7 +3,7 @@ const { append } = require("express/lib/response");
 const Logger = require("nodemon/lib/utils/log");
 const router = express.Router();
 //const users = require("../models/user.model");
-const User = require("../controllers/Users.controller.js");
+const User = require("../controllers/users.controller.js");
 
 const bodyparser = require("body-parser");
 

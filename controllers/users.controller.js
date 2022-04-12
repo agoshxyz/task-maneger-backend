@@ -67,6 +67,9 @@ const create = async (req, res) => {
     }
 
 };
+const authenticate = async (req, res) => {
+    const { UserPassword, } = req.body;
+}
 
 const update = async (req, res) => {
     try {
@@ -110,7 +113,7 @@ const update = async (req, res) => {
             res.status(returnStatusCode).send(returnData);
         }
 
-    
+
 
 
     } catch (err) {
@@ -149,7 +152,7 @@ const findAll = async (req, res) => {
     try {
         let users = {};
         users = await User.findAll({
-            where: { IsDeleted: null }
+            where: { IsDeleted: false }
         });
         res.status(200).send({ users });
     } catch (err) {
