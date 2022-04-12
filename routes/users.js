@@ -5,10 +5,10 @@ const User = require("../controllers/users.controller");
 const bodyparser = require("body-parser");
 
 router.get("/", User.findAll)
-router.get("/:UserID", User.findOne)
+router.get("/:id", User.findOne)
 router.use(bodyparser.json())
     .post("/register", User.create)
-router.delete("/:UserID", User.deleteUser)
-router.put("/:UserID", User.update)
+router.delete("/:id", User.deleteUser)
+router.put("/:id", User.update)
 
 module.exports = router;
