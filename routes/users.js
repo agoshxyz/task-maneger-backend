@@ -3,7 +3,7 @@ const { append } = require("express/lib/response");
 const Logger = require("nodemon/lib/utils/log");
 const router = express.Router();
 //const users = require("../models/user.model");
-const User = require("../controllers/Users.controller.js");
+const Tasks = require("../controllers/tasks.controller");
 
 const bodyparser = require("body-parser");
 
@@ -12,12 +12,12 @@ const dotenv = require('dotenv');
 
 dotenv.config(); //JwToken
 
-router.get("/", User.findAll)
-router.get("/:UserID", User.findOne)
+router.get("/", Tasks.findAllTask)
+router.get("/:UserID", Tasks.findOneTask)
 router.use(bodyparser.json())
-    .post("/register", User.create)
-router.delete("/:UserID", User.deleteUser)
-router.put("/:UserID", User.update)
+    .post("/register", Tasks.createTask)
+router.delete("/:UserID", Tasks.deleteTask)
+router.put("/:UserID", Tasks.updateTask)
 
 // const token = generateAccessToken({ username: req.body.username });
 // res.json(token);
