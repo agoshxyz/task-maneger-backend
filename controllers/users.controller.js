@@ -1,5 +1,8 @@
 const User = require("../models/user.model");
 const validateEmail = require("../utils/emailValidation");
+const Sequelize = require("sequelize");
+const passwordUtils = require("../utils/password");
+
 
 /**
  * Creats a new user
@@ -24,7 +27,7 @@ const create = async (req, res) => {
         }
 
         if (!UserPassword || UserPassword.length < 10) {
-            returnData = { message: "Invalid Name eqw" };
+            returnData = { message: "Invalid Password" };
             returnStatusCode = 400;
         }
 
@@ -44,14 +47,17 @@ const create = async (req, res) => {
             returnStatusCode = 400;
         }
 
+        const hash = await passwordUtils.generateHash(UserPassword)
+
         if (returnStatusCode === 201) {
             const newUser = {
                 UserName,
                 UserEmail,
-                UserPassword,
+                UserPassword: hash,
                 UserRole
             }
             const user = await User.create(newUser);
+
             res.status(returnStatusCode).send(user);
         } else {
             res.status(returnStatusCode).send(returnData);
@@ -64,44 +70,51 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
     try {
-        const { nume, email, parola, role } = req.body;
-
+        const { UserID, UserName, UserEmail, UserPassword, UserRole } = req.body;
+        let returnStatusCode = 201;
+        let returnData;
+        const { id } = req.params;
         const currentUser = await User.findOne({
-            where: { UserID: req.params.UserID },
+
+            where: { UserID: id },
+
         });
 
-        if (!currentUser) return res.status(404).send("404 USER NOT FOUND !!!!");
+        if (!currentUser) {
+            returnData = { message: "User not found" };
+            returnStatusCode = 404;
+        }
 
 
         // VALIDARE
-        if (nume == null || nume.length > 30)
-            return res.status(400).send("Invalid Name.");
-        if (validateEmail != email)
-            return res.status(400).send("Invalid Email")
         const existingUser = await User.findOne({
-            where: { email: email },
+            where: { UserEmail: UserEmail },
         });
-        if (existingUser && email != currentUser.email)
-            return res.status(400).send({
-                message: "invalid email adress"
-            })
-
+        if (existingUser && UserEmail != currentUser.UserEmail) {
+            returnData = { message: "Invalid EMAIL ADRESS" };
+            returnStatusCode = 400;
+        }
         const updateUser = {
-            nume,
-            email,
-            parola,
-            role,
+            UserName,
+            UserEmail,
+            UserPassword,
+            UserRole
         };
         if ((await User.update(updateUser, {
-            where: { UserID: req.params.UserID },
-        })) != 1)
-            return res.status(404).send("Couldn't update user!");
-        return res.status(200).send("User successfully updated!");
 
+            where: { UserID: id },
+        })) != 1) {
+            res.status(404).send("Couldn't update user!");
+        }
+        else {
+            res.status(returnStatusCode).send(returnData);
+        }
+
+    
 
 
     } catch (err) {
-        return res.status(500).send({ message: err.message });
+        res.status(500).send({ message: err.message });
     }
 
 }
@@ -109,31 +122,38 @@ const update = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        const currentUser = await User.findOne({
-            where: { UserID: req.params.UserID },//
-        });
 
-        if (!currentUser) return res.status(404).send("404 User not found!");
+        const { id } = req.params;
 
-        if ((await User.destroy({ where: { UserID: req.params.UserID } })) != 1)
-            return res.status(404).send('User can not be deleted');
-        return res.status(200).send('User deleted succesfully');
+        const userInstance = await User.findOne({
+            where: { UserID: id }
+        })
+        if (userInstance) {
+            userInstance.set({
+                IsDeleted: true
+            });
+            await userInstance.save();
+            res.status(200).send('User deleted succesfully');
 
 
-
+        } else {
+            res.status(404).send('User 404 Not found');
+        }
 
     } catch (err) {
-        return res.status(500).send({ message: err.message });
+        res.status(500).send({ message: err.message });
     }
 }
 
 const findAll = async (req, res) => {
     try {
         let users = {};
-        users = await User.findAll();
-        return res.status(200).send({ users });
+        users = await User.findAll({
+            where: { IsDeleted: null }
+        });
+        res.status(200).send({ users });
     } catch (err) {
-        return res.status(500).send({ message: err.message });
+        res.status(500).send({ message: err.message });
     }
 }
 
@@ -142,7 +162,10 @@ const findAll = async (req, res) => {
 const findOne = async (req, res) => {
     try {
         const user = await User.findOne({
-            where: { UserID: req.params.UserID }
+
+            where: { UserID: req.params.id }
+
+
         });
 
         if (!user) return res.status(404).send("404 User not found!");
