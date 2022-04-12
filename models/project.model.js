@@ -1,7 +1,13 @@
 const Sequelize = require("sequelize");
 const db = require("../config/database.config");
+const User = require("../models/user.model")
 
 const Project = db.define("Project", {
+  projectId: {
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    primaryKey: true,
+  },
   projectName: {
     type: Sequelize.STRING(30),
     allowNull: false,
@@ -11,8 +17,11 @@ const Project = db.define("Project", {
     allowNull: false,
   },
   projectSupervisor: {
-    type: Sequelize.STRING(300),
-    allowNull: false,
+    type: Sequelize.UUID,
+    references: {
+      model: User,
+      key: "UserID",
+    },
   },
   projectDeadline: {
     type: Sequelize.DATEONLY,
@@ -21,7 +30,6 @@ const Project = db.define("Project", {
   projectStatus: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
-    allowNull: false,
   },
 });
 
