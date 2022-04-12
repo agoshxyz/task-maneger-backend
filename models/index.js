@@ -2,13 +2,16 @@ const { Sequelize } = require('sequelize');
 const sequelize = require('../config/database.config');
 
 const user = require('./user.model');
-
-
-///creare tabele 
+const project = require('./project.model');
+const task = require('./task.model');
+///creare tabele
 
 
 const models = {
     User: new user(sequelize, Sequelize.DataTypes),
+    Project: new project(sequelize, Sequelize.DataTypes),
+    Task: new task(sequelize, Sequelize.DataTypes),
+
 
 };
 

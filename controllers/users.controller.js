@@ -75,7 +75,9 @@ const update = async (req, res) => {
         let returnData;
         const { id } = req.params;
         const currentUser = await User.findOne({
+
             where: { UserID: id },
+
         });
 
         if (!currentUser) {
@@ -99,6 +101,7 @@ const update = async (req, res) => {
             UserRole
         };
         if ((await User.update(updateUser, {
+
             where: { UserID: id },
         })) != 1) {
             res.status(404).send("Couldn't update user!");
@@ -106,6 +109,8 @@ const update = async (req, res) => {
         else {
             res.status(returnStatusCode).send(returnData);
         }
+
+    
 
 
     } catch (err) {
@@ -117,6 +122,7 @@ const update = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
+
         const { id } = req.params;
 
         const userInstance = await User.findOne({
@@ -128,6 +134,7 @@ const deleteUser = async (req, res) => {
             });
             await userInstance.save();
             res.status(200).send('User deleted succesfully');
+
 
         } else {
             res.status(404).send('User 404 Not found');
@@ -155,7 +162,10 @@ const findAll = async (req, res) => {
 const findOne = async (req, res) => {
     try {
         const user = await User.findOne({
+
             where: { UserID: req.params.id }
+
+
         });
 
         if (!user) return res.status(404).send("404 User not found!");
