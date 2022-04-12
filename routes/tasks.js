@@ -1,17 +1,15 @@
 const express = require("express");
-const { append } = require("express/lib/response");
-const Logger = require("nodemon/lib/utils/log");
 const router = express.Router();
-//const users = require("../models/user.model");
-const Task = require("../controllers/Users.controller.js");
+
+const Task = require("../controllers/tasks.controller");
 
 const bodyparser = require("body-parser");
 
-router.get("/", Task.findAll)
-router.get("/:TaskID", Task.findOne)
+router.get("/", Task.findAllTask)
+router.get("/:TaskID", Task.findOneTask)
 router.use(bodyparser.json())
-    .post("/createTask", Task.create)
-router.delete("/:TaskID", Task.deleteUser)
-router.put("/:TaskID", Task.update)
+    .post("/createTask", Task.createTask)
+router.delete("/:TaskID", Task.deleteTask)
+router.put("/:TaskID", Task.updateTask)
 
 module.exports = router;
