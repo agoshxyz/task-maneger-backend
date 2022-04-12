@@ -110,7 +110,7 @@ const update = async (req, res) => {
             res.status(returnStatusCode).send(returnData);
         }
 
-    
+
 
 
     } catch (err) {
@@ -149,7 +149,7 @@ const findAll = async (req, res) => {
     try {
         let users = {};
         users = await User.findAll({
-            where: { IsDeleted: null }
+            where: { IsDeleted: false }
         });
         res.status(200).send({ users });
     } catch (err) {
