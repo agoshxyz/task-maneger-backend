@@ -4,7 +4,7 @@ const validateEmail = require("../utils/emailValidation");
 
 
 //Create new task
-const create = async (req, res) => {
+const createTask = async (req, res) => {
     const { taskName, taskDescription, taskSupervisor, taskAssignedUsers } = req.body;
     try {
         let returnStatusCode = 201;
@@ -16,12 +16,12 @@ const create = async (req, res) => {
 
         //VALIDATIONS taskname+assigneduser
         if (taskName == null || taskName.length > 30) {
-            returnData = { message: "Invalid Task name" };
+            returnData = { message: "Invalid task name." };
             returnStatusCode = 400;
         }
 
         if (!existingUser) {
-            returnData = { message: "Task are not avaible" };
+            returnData = { message: "Task are not avaible." };
             returnStatusCode = 400;
         }
 
@@ -48,7 +48,7 @@ const create = async (req, res) => {
 
 
 //Update existing task
-const update = async (req, res) => {
+const updateTask = async (req, res) => {
     try {
         const { taskName, taskDescription, taskSupervisor, taskAssignedUsers, taskStatus } = req.body;
         const { id } = req.params
@@ -65,15 +65,15 @@ const update = async (req, res) => {
             StatusCode = 400;
         }
         if (taskDescription == null || taskDescription.length > 300) {
-            returnData = { message: "Invalid User ID" };
+            returnData = { message: "Invalid user ID." };
             StatusCode = 400;
         }
         if (taskAssignedUsers == null || taskAssignedUsers.length > 100) {
-            returnData = { message: "Invalid Assigned Users" };
+            returnData = { message: "Invalid Assigned Users." };
             StatusCode = 400;
         }
         if (taskSupervisor == null || taskSupervisor.length > 30) {
-            returnData = { message: "Invalid Supervisor" };
+            returnData = { message: "Invalid supervisor." };
             StatusCode = 400;
         }
         const updatedTask = {
@@ -87,8 +87,8 @@ const update = async (req, res) => {
                 where: { taskID: id },
             })) != 1
         )
-            return res.status(404).send("Couldn't update Task!");
-        return res.status(200).send("Task successfully updated !");
+            return res.status(404).send("Couldn't update task!");
+        return res.status(200).send("Task successfully updated!");
     } catch (err) {
         return res.status(500).send({ message: err.message });
     }
@@ -100,17 +100,17 @@ const deleteTask = async (req, res) => {
         const { id } = req.params;
 
         const taskInstance = await Task.findOne({
-            where: { taskIDD: id }
+            where: { taskID: id }
         })
         if (taskInstance) {
             taskInstance.set({
                 IsDeleted: true
             });
             await taskInstance.save();
-            res.status(200).send('User deleted succesfully');
+            res.status(200).send('Task deleted succesfully.');
 
         } else {
-            res.status(404).send('User 404 Not found');
+            res.status(404).send('Task 404 Not found.');
         }
 
     } catch (err) {
@@ -118,7 +118,7 @@ const deleteTask = async (req, res) => {
     }
 }
 
-const findAll = async (req, res) => {
+const findAllTask = async (req, res) => {
     try {
         let tasks = {};
         tasks = await Task.findAll();
@@ -127,22 +127,14 @@ const findAll = async (req, res) => {
         return res.status(500).send({ message: err.message });
     }
 };
-// const findAll = async (req, res) => {
-//     try {
-//         let tasks = {};
-//         tasks = await Task.findAll();
-//         return res.status(200).send({ tasks });
-//     } catch (err) {
-//         return res.status(500).send({ message: err.message });
-//     }
-// }
 
-const findOne = async (req, res) => {
+
+const findOneTask = async (req, res) => {
     try {
         const task = await Task.findOne({
             where: { taskID: req.params.id }
         });
-        if (!task) return res.status(404).send("404 User not found!");
+        if (!task) return res.status(404).send("404 Task not found!");
         return res.status(200).send({ task });
     } catch (err) {
         return res.status(500).send({ message: err.message });
@@ -150,9 +142,9 @@ const findOne = async (req, res) => {
 }
 
 module.exports = {
-    create,
-    update,
+    createTask,
+    updateTask,
     deleteTask,
-    findAll,
-    findOne
+    findAllTask,
+    findOneTask
 }
