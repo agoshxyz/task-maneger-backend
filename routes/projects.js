@@ -1,17 +1,14 @@
 const express = require("express");
-const { append } = require("express/lib/response");
-const Logger = require("nodemon/lib/utils/log");
 const router = express.Router();
-//const users = require("../models/user.model");
-const Project = require("../controllers/Users.controller.js");
+const Project = require("../controllers/projects.controller");
 
 const bodyparser = require("body-parser");
 
-router.get("/", Project.findAll)
-router.get("/:ProjectID", Project.findOne)
+router.get("/", Project.getAllProjects)
+// router.get("/:id", Project.findOne)
 router.use(bodyparser.json())
-    .post("/createProject", Project.create)
-router.delete("/:ProjectID", Project.deleteUser)
-router.put("/:ProjectID", Project.update)
+    .post("/createProject", Project.createProject)
+router.delete("/:id", Project.deleteProject)
+router.put("/:id", Project.updateProject)
 
 module.exports = router;
