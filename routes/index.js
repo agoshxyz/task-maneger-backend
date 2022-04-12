@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const user = require('./users');
 // const project = require('./projects');
-// const task = require('./tasks');
+const task = require('./tasks');
 
 const auth = require('./auth-routes');
 
@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
 
 router.use("/users", user)
 // router.use("/projects", project)
-// router.use("/tasks", task)
+router.use("/tasks", task)
 
 router.use("/user", auth)
 
