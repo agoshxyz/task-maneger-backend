@@ -31,6 +31,10 @@ const Project = db.define("Project", {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
   },
+  IsDeleted: {
+    type: Sequelize.STRING(30),
+    defaultValue: false
+  },
 });
 
 Project.sync({ alter: true });

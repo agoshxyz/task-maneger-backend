@@ -139,7 +139,9 @@ const findOneProjects = async (req, res) => {
 const getAllProjects = async (req, res) => {
   try {
     let projects = {};
-    projects = await Project.findAll();
+    projects = await Project.findAll({
+      where: { IsDeleted: "false" }
+    });
     return res.status(200).send(projects);
   } catch (err) {
     return res.status(500).send({ message: err.message });
