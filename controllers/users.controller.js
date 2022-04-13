@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 const validateEmail = require("../utils/emailValidation");
 const Sequelize = require("sequelize");
 const passwordUtils = require("../utils/password");
-
+const jwt = require("jsonwebtoken")
 
 /**
  * Creats a new user
@@ -67,9 +67,61 @@ const create = async (req, res) => {
     }
 
 };
+
+
 const authenticate = async (req, res) => {
-    const { UserPassword, } = req.body;
+    try {
+        const { UserPassword, UserEmail } = req.body;
+
+        //find user by email
+        const user = await User.findOne({
+            where: {
+                UserEmail: UserEmail,
+            },
+        });
+        passwordverify = await passwordUtils.validPassword(UserPassword, user.UserPassword);
+        //user validation
+
+        if (user && passwordverify) {
+
+
+            const token = jwt.sign(UserEmail, process.env.TOKEN_SECRET, {});
+
+            // token(user);
+            res.status(200).json({
+                user,
+                jwt: token
+            });
+        } else {
+            res.status(400).send("invalid credentials");
+        }
+
+
+        // const generateAccessToken = jwt.sign(
+        //     user, process.env.TOKEN_SECRET, { expiresIn: '1d' }
+        // );
+        // //passsword validation
+        // if (await passwordUtils.validPassword(UserPassword)) {
+        //     generateAccessToken(user);
+        //     returnData = { message: "User is logged in!" }
+        //     res.json({ generateAccessToken })
+        // } else {
+        //     returnData = { message: "Wrong Password!" }
+        //     returnStatusCode = 404;
+        // }
+
+
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err)
+    }
+
+
+
 }
+
+
 
 const update = async (req, res) => {
     try {
@@ -185,5 +237,6 @@ module.exports = {
     update,
     deleteUser,
     findAll,
-    findOne
+    findOne,
+    authenticate
 }

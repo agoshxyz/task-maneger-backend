@@ -7,19 +7,4 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-router.post('/login', async (req, res) => {
-    try {
-        const { UserEmail, UserPassword } = req.body;
-        const existingUser = await User.findOne({
-            where: {
-                UserEmail: UserEmail
-            },
-        });
-        res.status(200).json("Mesaj te-ai logat!")
-    } catch (error) {
-        console.error("[ERROR]: ", error)
-        res.sendStatus(500)
-    }
-});
-
 module.exports = router;
