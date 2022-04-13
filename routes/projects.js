@@ -5,7 +5,7 @@ const Project = require("../controllers/projects.controller");
 const bodyparser = require("body-parser");
 
 router.get("/", Project.getAllProjects)
-// router.get("/:id", Project.findOne)
+router.get("/:id", Project.findOneProjects)
 router.use(bodyparser.json())
     .post("/createProject", Project.createProject)
 router.delete("/:id", Project.deleteProject)

@@ -112,7 +112,7 @@ const deleteProject = async (req, res) => {
     });
     if (projectInstance) {
       projectInstance.set({
-        isDeleted: true,
+        IsDeleted: true,
       });
       await projectInstance.save();
       res.status(200).send({ message: "Project deleted successfully" });
@@ -123,6 +123,18 @@ const deleteProject = async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 };
+
+const findOneProjects = async (req, res) => {
+  try {
+    const projects = await Project.findOne({
+      where: { projectId: req.params.id }
+    });
+    if (!projects) return res.status(404).send("404 Project not found!");
+    return res.status(200).send({ projects });
+  } catch (err) {
+    return res.status(500).send({ message: err.message });
+  }
+}
 
 const getAllProjects = async (req, res) => {
   try {
@@ -138,4 +150,5 @@ module.exports = {
   updateProject,
   deleteProject,
   getAllProjects,
+  findOneProjects
 };
