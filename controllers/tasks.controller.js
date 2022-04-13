@@ -5,7 +5,14 @@ const validateEmail = require("../utils/emailValidation");
 
 //Create new task
 const createTask = async (req, res) => {
-    const { taskName, taskDescription, taskSupervisor, taskAssignedUsers, taskDeadline } = req.body;
+    const {
+        taskName,
+        taskDescription,
+        taskSupervisor,
+        taskAssignedUsers,
+        taskDeadline
+    } = req.body;
+
     try {
         let returnStatusCode = 201;
         let returnData;
@@ -31,7 +38,6 @@ const createTask = async (req, res) => {
                 taskDescription,
                 taskSupervisor,
                 taskAssignedUsers,
-                taskStatus,
                 taskDeadline
             };
             const task = await Task.create(newTask);
