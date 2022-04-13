@@ -44,6 +44,10 @@ const Task = db.define("Task", {
       key: "projectId",
     },
   },
+  IsDeleted: {
+    type: Sequelize.STRING(30),
+    defaultValue: false
+  },
 });
 
 Task.sync({ alter: true });

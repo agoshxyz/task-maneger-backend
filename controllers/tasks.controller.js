@@ -124,7 +124,9 @@ const deleteTask = async (req, res) => {
 const findAllTask = async (req, res) => {
     try {
         let tasks = {};
-        tasks = await Task.findAll();
+        tasks = await Task.findAll({
+            where: { IsDeleted: "false" }
+        });
         return res.status(200).send(tasks);
     } catch (err) {
         return res.status(500).send({ message: err.message });
