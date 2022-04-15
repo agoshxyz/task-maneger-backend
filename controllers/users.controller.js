@@ -2,12 +2,12 @@ const User = require("../models/user.model");
 const validateEmail = require("../utils/emailValidation");
 const Sequelize = require("sequelize");
 const passwordUtils = require("../utils/password");
-const jwt = require("jsonwebtoken")
-
+const jwt = require("jsonwebtoken");
+const cookie = require("cookies");
 /**
  * Creats a new user
  * @param {*} req Htpp req
- * @param {*} res 
+ * @param {*} res
  */
 const create = async (req, res) => {
     const { UserName, UserEmail, UserPassword, UserRole } = req.body;
@@ -38,7 +38,7 @@ const create = async (req, res) => {
 
         const existingUser = await User.findOne({
             where: {
-                UserEmail: UserEmail
+                UserEmail: UserEmail,
             },
         });
 
@@ -47,15 +47,15 @@ const create = async (req, res) => {
             returnStatusCode = 400;
         }
 
-        const hash = await passwordUtils.generateHash(UserPassword)
+        const hash = await passwordUtils.generateHash(UserPassword);
 
         if (returnStatusCode === 201) {
             const newUser = {
                 UserName,
                 UserEmail,
                 UserPassword: hash,
-                UserRole
-            }
+                UserRole,
+            };
             const user = await User.create(newUser);
 
             res.status(returnStatusCode).send(user);
@@ -65,13 +65,11 @@ const create = async (req, res) => {
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
-
 };
-
 
 const authenticate = async (req, res) => {
     try {
-        const { UserPassword, UserEmail } = req.body;
+        const { UserPassword, UserEmail, UserRole } = req.body;
 
         //find user by email
         const user = await User.findOne({
@@ -79,49 +77,36 @@ const authenticate = async (req, res) => {
                 UserEmail: UserEmail,
             },
         });
-        passwordverify = await passwordUtils.validPassword(UserPassword, user.UserPassword);
+        passwordverify = await passwordUtils.validPassword(
+            UserPassword,
+            user.UserPassword
+        );
         //user validation
 
         if (user && passwordverify) {
-
-
-            const token = jwt.sign(UserEmail, process.env.TOKEN_SECRET, {});
-
-            // token(user);
-            res.status(200).json({
+            const token = jwt.sign(
+                {
+                    email: UserEmail,
+                    time: Date.now(),
+                },
+                "secret",
+                { expiresIn: "8h" }
+            );
+            res.cookie("access_token", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+            }).status(200).json({
                 user,
-                jwt: token
+                UserRole
             });
         } else {
             res.status(400).send("invalid credentials");
         }
-
-
-        // const generateAccessToken = jwt.sign(
-        //     user, process.env.TOKEN_SECRET, { expiresIn: '1d' }
-        // );
-        // //passsword validation
-        // if (await passwordUtils.validPassword(UserPassword)) {
-        //     generateAccessToken(user);
-        //     returnData = { message: "User is logged in!" }
-        //     res.json({ generateAccessToken })
-        // } else {
-        //     returnData = { message: "Wrong Password!" }
-        //     returnStatusCode = 404;
-        // }
-
-
-
     } catch (err) {
         console.log(err);
-        res.status(500).send(err)
+        res.status(500).send(err);
     }
-
-
-
-}
-
-
+};
 
 const update = async (req, res) => {
     try {
@@ -130,16 +115,13 @@ const update = async (req, res) => {
         let returnData;
         const { id } = req.params;
         const currentUser = await User.findOne({
-
             where: { UserID: id },
-
         });
 
         if (!currentUser) {
             returnData = { message: "User not found" };
             returnStatusCode = 404;
         }
-
 
         // VALIDARE
         const existingUser = await User.findOne({
@@ -153,84 +135,67 @@ const update = async (req, res) => {
             UserName,
             UserEmail,
             UserPassword,
-            UserRole
+            UserRole,
         };
-        if ((await User.update(updateUser, {
-
-            where: { UserID: id },
-        })) != 1) {
+        if (
+            (await User.update(updateUser, {
+                where: { UserID: id },
+            })) != 1
+        ) {
             res.status(404).send("Couldn't update user!");
-        }
-        else {
+        } else {
             res.status(returnStatusCode).send(returnData);
         }
-
-
-
-
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
-
-}
-
+};
 
 const deleteUser = async (req, res) => {
     try {
-
         const { id } = req.params;
 
         const userInstance = await User.findOne({
-            where: { UserID: id }
-        })
+            where: { UserID: id },
+        });
         if (userInstance) {
             userInstance.set({
-                IsDeleted: true
+                IsDeleted: true,
             });
             await userInstance.save();
-            res.status(200).send('User deleted succesfully');
-
-
+            res.status(200).send("User deleted succesfully");
         } else {
-            res.status(404).send('User 404 Not found');
+            res.status(404).send("User 404 Not found");
         }
-
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
-}
+};
 
 const findAll = async (req, res) => {
     try {
         let users = {};
         users = await User.findAll({
-            where: { IsDeleted: "false" }
+            where: { IsDeleted: "false" },
         });
         res.status(200).send({ users });
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
-}
-
-
+};
 
 const findOne = async (req, res) => {
     try {
         const user = await User.findOne({
-
-            where: { UserID: req.params.id }
-
-
+            where: { UserID: req.params.id },
         });
 
         if (!user) return res.status(404).send("404 User not found!");
         return res.status(200).send({ user });
-
-
     } catch (err) {
         return res.status(500).send({ message: err.message });
     }
-}
+};
 
 module.exports = {
     create,
@@ -238,5 +203,5 @@ module.exports = {
     deleteUser,
     findAll,
     findOne,
-    authenticate
-}
+    authenticate,
+};
