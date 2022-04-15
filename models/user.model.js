@@ -36,10 +36,7 @@ const User = db.define("User", {
     });
 
 
-User.hasMany(role, {
-    foreignKey: 'RoleID',
-})
-role.belongsTo(User);
+
 
 User.sync({ alter: true });
 module.exports = User;
