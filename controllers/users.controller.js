@@ -71,7 +71,7 @@ const create = async (req, res) => {
 
 const authenticate = async (req, res) => {
     try {
-        const { UserPassword, UserEmail } = req.body;
+        const { UserPassword, UserEmail, UserRole } = req.body;
 
         //find user by email
         const user = await User.findOne({
@@ -90,27 +90,12 @@ const authenticate = async (req, res) => {
             // token(user);
             res.status(200).json({
                 user,
-                jwt: token
+                jwt: token,
+                UserRole
             });
         } else {
             res.status(400).send("invalid credentials");
         }
-
-
-        // const generateAccessToken = jwt.sign(
-        //     user, process.env.TOKEN_SECRET, { expiresIn: '1d' }
-        // );
-        // //passsword validation
-        // if (await passwordUtils.validPassword(UserPassword)) {
-        //     generateAccessToken(user);
-        //     returnData = { message: "User is logged in!" }
-        //     res.json({ generateAccessToken })
-        // } else {
-        //     returnData = { message: "Wrong Password!" }
-        //     returnStatusCode = 404;
-        // }
-
-
 
     } catch (err) {
         console.log(err);
