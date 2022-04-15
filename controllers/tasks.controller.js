@@ -1,7 +1,7 @@
 const Task = require("../models/task.model");
 const User = require("../models/user.model");
 const validateEmail = require("../utils/emailValidation");
-
+const Project = require("../models/project.model");
 
 //Create new task
 const createTask = async (req, res) => {
@@ -152,10 +152,26 @@ const findOneTask = async (req, res) => {
     }
 }
 
+
+const findAllTaskByProject = async (req, res) => {
+    try {
+        let tasks = {};
+        tasks = await Task.findAll({
+            where: { task_fk_project: req.params.id }
+        });
+        return res.status(200).send(tasks);
+    } catch (err) {
+        return res.status(500).send({ message: err.message });
+    }
+};
+
+
+
 module.exports = {
     createTask,
     updateTask,
     deleteTask,
     findAllTask,
-    findOneTask
+    findOneTask,
+    findAllTaskByProject
 }

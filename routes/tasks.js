@@ -11,5 +11,6 @@ router.use(bodyparser.json())
     .post("/createTask", Task.createTask)
 router.delete("/:id", Task.deleteTask)
 router.put("/:id", Task.updateTask)
+router.get("/:id", Task.findAllTaskByProject)
 
 module.exports = router;
