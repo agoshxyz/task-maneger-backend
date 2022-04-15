@@ -10,7 +10,8 @@ const createTask = async (req, res) => {
         taskDescription,
         taskSupervisor,
         taskAssignedUsers,
-        taskDeadline
+        taskDeadline,
+        task_fk_project
     } = req.body;
 
     try {
@@ -38,7 +39,8 @@ const createTask = async (req, res) => {
                 taskDescription,
                 taskSupervisor,
                 taskAssignedUsers,
-                taskDeadline
+                taskDeadline,
+                task_fk_project
             };
             const task = await Task.create(newTask);
             res.status(returnStatusCode).send({
