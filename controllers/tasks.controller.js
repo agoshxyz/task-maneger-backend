@@ -155,9 +155,11 @@ const findOneTask = async (req, res) => {
 
 const findAllTaskByProject = async (req, res) => {
     try {
+
         let tasks = {};
         tasks = await Task.findAll({
             where: { task_fk_project: req.params.id }
+
         });
         return res.status(200).send(tasks);
     } catch (err) {
