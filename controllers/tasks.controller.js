@@ -10,7 +10,8 @@ const createTask = async (req, res) => {
         taskDescription,
         taskSupervisor,
         taskAssignedUsers,
-        taskDeadline
+        taskDeadline,
+        task_fk_project
     } = req.body;
 
     try {
@@ -38,7 +39,8 @@ const createTask = async (req, res) => {
                 taskDescription,
                 taskSupervisor,
                 taskAssignedUsers,
-                taskDeadline
+                taskDeadline,
+                task_fk_project
             };
             const task = await Task.create(newTask);
             res.status(returnStatusCode).send({
@@ -155,9 +157,11 @@ const findOneTask = async (req, res) => {
 
 const findAllTaskByProject = async (req, res) => {
     try {
+
         let tasks = {};
         tasks = await Task.findAll({
             where: { task_fk_project: req.params.id }
+
         });
         return res.status(200).send(tasks);
     } catch (err) {

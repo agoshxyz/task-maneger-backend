@@ -25,6 +25,13 @@ const Task = db.define("Task", {
     type: Sequelize.DATEONLY,
     allowNull: true,
   },
+  task_fk_project: {
+    type: Sequelize.UUID,
+    references: {
+      model: Project,
+      key: "projectId",
+    },
+  },
   taskAssignedUsers: {
     type: Sequelize.UUID,
     // foreignKey: 'UserID'
@@ -37,13 +44,7 @@ const Task = db.define("Task", {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
   },
-  task_fk_project: {
-    type: Sequelize.UUID,
-    references: {
-      model: Project,
-      key: "projectId",
-    },
-  },
+
   IsDeleted: {
     type: Sequelize.STRING(30),
     defaultValue: false
