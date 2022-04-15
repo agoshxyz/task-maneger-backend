@@ -1,4 +1,5 @@
 const express = require('express')
+const cookieParser = require("cookie-parser");
 const sequelize = require('./config/database.config')
 const models = require("./models")
 const app = express()
@@ -17,6 +18,7 @@ sequelize.authenticate()
   });
 
 app.use(bodyparser.json())
+app.use(cookieParser());
 app.use(routes);
 
 app.listen(port, () => {
